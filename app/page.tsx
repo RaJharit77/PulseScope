@@ -5,42 +5,62 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import ThreeBackground from '@/components/ThreeBackground'
 import SearchBar from '@/components/SearchBar'
-//import RedditFeed from '@/components/RedditFeed'
 import YouTubeFeed from '@/components/YouTubeFeed'
-import PodcastFeed from '@/components/PodcastFeed'
+import SpotifyTrackFeed from '@/components/SpotifyTrackFeed'
+import SpotifyPodcastFeed from '@/components/SpotifyPodcastFeed'
+import TaddyPodcastFeed from '@/components/TaddyPodcastFeed'
 import PopularityChart from '@/components/PopularityChart'
-import SpotifyPodcastFeed from '@/components/SpotifyPodcastFeed';
-import SpotifyTrackFeed from '@/components/SpotifyTrackFeed';
-import TaddyPodcastFeed from '@/components/TaddyPodcastFeed';
-import { getPopularityTrends, searchYouTube } from '@/services/youtube'
-//import { searchReddit, searchPodcasts } from '@/services/reddit'
-import { searchPodcasts } from '@/services/listen_notes'
+import LoadingSkeleton from '@/components/LoadingSkeleton'
+import ErrorMessage from '@/components/ErrorMessage'
+import { searchYouTube, getPopularityTrends } from '@/services/youtube'
+import { searchSpotifyTracks, searchSpotifyPodcasts } from '@/services/spotify'
+import { searchTaddyPodcasts } from '@/services/taddy'
+
+type SearchResults = {
+  keyword: string
+  youtube: Awaited<ReturnType<typeof searchYouTube>>
+  spotify: {
+    tracks: Awaited<ReturnType<typeof searchSpotifyTracks>>
+    podcasts: Awaited<ReturnType<typeof searchSpotifyPodcasts>>
+  }
+  taddy: Awaited<ReturnType<typeof searchTaddyPodcasts>>
+  trends: Awaited<ReturnType<typeof getPopularityTrends>>
+}
 
 const queryClient = new QueryClient()
 
 function HomeContent() {
   const [isLoading, setIsLoading] = useState(false)
-  const [searchResults, setSearchResults] = useState<any>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [searchResults, setSearchResults] = useState<SearchResults | null>(null)
 
   const handleSearch = async (keyword: string) => {
     setIsLoading(true)
+    setError(null)
+    setSearchResults(null)
+
     try {
-      const [redditData, youtubeData, podcastData, trendsData] = await Promise.all([
-        //searchReddit(keyword),
+      const [youtubeData, spotifyTracks, spotifyPodcasts, taddyPodcasts, trendsData] = await Promise.all([
         searchYouTube(keyword),
-        searchPodcasts(keyword),
+        searchSpotifyTracks(keyword),
+        searchSpotifyPodcasts(keyword),
+        searchTaddyPodcasts(keyword),
         getPopularityTrends(keyword)
       ])
 
       setSearchResults({
         keyword,
-        reddit: redditData,
         youtube: youtubeData,
-        podcasts: podcastData,
+        spotify: {
+          tracks: spotifyTracks,
+          podcasts: spotifyPodcasts
+        },
+        taddy: taddyPodcasts,
         trends: trendsData
       })
-    } catch (error) {
-      console.error('Search error:', error)
+    } catch (err) {
+      console.error('Search error:', err)
+      setError('Une erreur est survenue lors de la recherche. Veuillez réessayer.')
     } finally {
       setIsLoading(false)
     }
@@ -62,13 +82,25 @@ function HomeContent() {
             </span>
           </h1>
           <p className="text-xl text-gray-400">
-            Explorez les tendances sociales et contenus audio-visuels en temps réel
+            Explorez les tendances audio-visuelles en temps réel
           </p>
         </motion.div>
 
         <SearchBar onSearch={handleSearch} isLoading={isLoading} />
 
-        {searchResults && (
+        {error && (
+          <div className="mt-8">
+            <ErrorMessage message={error} />
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="mt-12">
+            <LoadingSkeleton />
+          </div>
+        )}
+
+        {searchResults && !isLoading && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -85,14 +117,11 @@ function HomeContent() {
 
             <PopularityChart data={searchResults.trends} />
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/*<RedditFeed posts={searchResults.reddit} />*/}
-              <YouTubeFeed videos={searchResults.youtube} />
-              <PodcastFeed podcasts={searchResults.podcasts} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
               <YouTubeFeed videos={searchResults.youtube} />
               <SpotifyTrackFeed tracks={searchResults.spotify.tracks} />
               <SpotifyPodcastFeed episodes={searchResults.spotify.podcasts} />
-              <TaddyPodcastFeed episodes={searchResults.podcasts} />
+              <TaddyPodcastFeed episodes={searchResults.taddy} />
             </div>
           </motion.div>
         )}

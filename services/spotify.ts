@@ -1,3 +1,68 @@
+interface SpotifyEpisode {
+    id: string;
+    name: string;
+    description: string;
+    show: { name: string };
+    audio_preview_url: string;
+    images: Array<{ url: string }>;
+    duration_ms: number;
+    external_urls: { spotify: string };
+}
+
+interface SpotifyEpisodeSearchResult {
+    episodes?: { items: SpotifyEpisode[] };
+}
+
+interface SpotifyTrack {
+    id: string;
+    name: string;
+    artists: Array<{ name: string }>;
+    album: {
+        name: string;
+        images: Array<{ url: string }>;
+    };
+    popularity: number;
+    preview_url: string;
+    external_urls: { spotify: string };
+}
+
+interface SpotifyTrackSearchResult {
+    tracks?: { items: SpotifyTrack[] };
+}
+
+export async function searchSpotifyPodcasts(keyword: string) {
+    const res = await fetch(`/api/spotify?type=episode&q=${encodeURIComponent(keyword)}`);
+    const data = await res.json() as SpotifyEpisodeSearchResult;
+    return data.episodes?.items.map((episode) => ({
+        id: episode.id,
+        title: episode.name,
+        description: episode.description,
+        podcastTitle: episode.show.name,
+        audioUrl: episode.audio_preview_url,
+        thumbnail: episode.images[0]?.url,
+        duration: episode.duration_ms / 1000,
+        spotifyUrl: episode.external_urls.spotify,
+    })) || [];
+}
+
+export async function searchSpotifyTracks(keyword: string) {
+    const res = await fetch(`/api/spotify?type=track&q=${encodeURIComponent(keyword)}`);
+    const data = await res.json() as SpotifyTrackSearchResult;
+    return data.tracks?.items.map((track) => ({
+        id: track.id,
+        title: track.name,
+        artist: track.artists.map((a) => a.name).join(', '),
+        album: track.album.name,
+        thumbnail: track.album.images[0]?.url,
+        popularity: track.popularity,
+        previewUrl: track.preview_url,
+        spotifyUrl: track.external_urls.spotify,
+    })) || [];
+}
+
+
+
+/*
 import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 
 let spotifyApi: SpotifyApi | null = null;
@@ -8,7 +73,6 @@ async function getSpotifyClient() {
     const clientId = process.env.SPOTIFY_CLIENT_ID!;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
 
-    // Client Credentials flow - accès public aux podcasts
     const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -67,4 +131,4 @@ export async function searchSpotifyTracks(keyword: string) {
         console.error('Spotify API error:', error);
         return [];
     }
-}
+}*/
