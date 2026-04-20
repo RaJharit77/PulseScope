@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, Clock } from 'lucide-react';
+import Image from 'next/image';
 
 interface TaddyEpisode {
     id: string;
@@ -48,10 +49,12 @@ export default function TaddyPodcastFeed({ episodes }: { episodes: TaddyEpisode[
                         className="p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-purple-500/50 transition-all"
                     >
                         <div className="flex gap-3">
-                            <img
+                            <Image
                                 src={episode.thumbnail}
                                 alt={episode.title}
-                                className="w-16 h-16 rounded-lg object-cover"
+                                width={64}
+                                height={64}
+                                className="rounded-lg object-cover"
                             />
                             <div className="flex-1">
                                 <h3 className="font-semibold text-white line-clamp-2">

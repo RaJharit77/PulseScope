@@ -3,6 +3,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Play, Eye, Clock } from 'lucide-react'
+import Image from 'next/image'
+
+interface YouTubeStatistics {
+    viewCount: string
+}
 
 interface YouTubeVideo {
     id: string
@@ -11,7 +16,7 @@ interface YouTubeVideo {
     thumbnail: string
     channelTitle: string
     publishedAt: string
-    statistics: any
+    statistics: YouTubeStatistics
     url: string
 }
 
@@ -75,10 +80,12 @@ export default function YouTubeFeed({ videos }: YouTubeFeedProps) {
                         onClick={() => setPlayingVideo(video.id)}
                     >
                         <div className="relative w-40 h-24 shrink-0">
-                            <img
+                            <Image
                                 src={video.thumbnail}
                                 alt={video.title}
-                                className="w-full h-full object-cover rounded-lg"
+                                fill
+                                objectFit="cover"
+                                className="rounded-lg"
                             />
                             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors rounded-lg flex items-center justify-center">
                                 <Play className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Play, ExternalLink, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface SpotifyTrack {
     id: string;
@@ -31,9 +32,11 @@ export default function SpotifyTrackFeed({ tracks }: { tracks: SpotifyTrack[] })
                         className="p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-green-500/50 transition-all"
                     >
                         <div className="flex gap-3">
-                            <img
+                            <Image
                                 src={track.thumbnail}
                                 alt={track.album}
+                                width={64}
+                                height={64}
                                 className="w-16 h-16 rounded-lg object-cover"
                             />
                             <div className="flex-1">

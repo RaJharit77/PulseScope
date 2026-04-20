@@ -22,10 +22,14 @@ interface PopularityChartProps {
         }>
     }
 }
+type ChartPoint = {
+    date: string
+    [key: string]: string | number
+}
 
 export default function PopularityChart({ data }: PopularityChartProps) {
     const chartData = data.dates.map((date, index) => {
-        const point: any = { date }
+        const point: ChartPoint = { date }
         data.datasets.forEach(dataset => {
             point[dataset.name] = dataset.data[index]
         })
