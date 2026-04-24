@@ -1,19 +1,19 @@
 import Link from 'next/link';
-import { 
-    ArrowRight, 
-    TrendingUp, 
-    BarChart3, 
-    Music, 
-    Podcast, 
-    Search, 
-    ShieldCheck 
+import {
+    ArrowRight,
+    TrendingUp,
+    BarChart3,
+    Music,
+    Podcast,
+    Search,
+    ShieldCheck
 } from 'lucide-react';
 
 export default function AboutPage() {
     return (
         <div className="max-w-6xl mx-auto py-12 px-4">
             <div className="text-center mb-16">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r  from-primary to-secondary bg-clip-text text-transparent">
                     À propos de PulseScope
                 </h1>
                 <p className="text-lg text-gray-400 max-w-2xl mx-auto">
