@@ -101,6 +101,14 @@ export default function VerticalNavbar() {
                                                 <p className="text-xs text-gray-400 truncate">{session.user?.email}</p>
                                             </div>
                                         </div>
+                                        <Link
+                                            href="/profile"
+                                            onClick={() => setShowUserMenu(false)}
+                                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:bg-white/5 rounded-lg transition mb-1"
+                                        >
+                                            <User className="w-4 h-4" />
+                                            Mon profil
+                                        </Link>
                                         <button
                                             onClick={() => signOut()}
                                             className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition"
