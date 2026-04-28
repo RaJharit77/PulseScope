@@ -7,9 +7,11 @@ import { signOut, useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import Image from 'next/image';
+import { SearchIcon } from 'lucide-react';
 
 const navItems = [
     { href: '/', label: 'Accueil', icon: Home },
+    { href: '/explore', label: 'Explorer', icon: SearchIcon },
     { href: '/about', label: 'À propos', icon: Info },
     { href: '/demo', label: 'Démo', icon: PlayCircle },
     { href: '/test', label: 'Test API', icon: FlaskConical },

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, Clock } from 'lucide-react';
@@ -37,10 +36,11 @@ export default function TaddyPodcastFeed({ episodes }: { episodes: TaddyEpisode[
             <h2 className="text-2xl font-bold bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
                 Podcasts (Taddy)
             </h2>
-
             <audio ref={audioRef} className="hidden" />
-
             <div className="space-y-3 max-h-150 overflow-y-auto pr-2">
+                {episodes.length === 0 && (
+                    <p className="text-gray-400">Aucun podcast trouvé.</p>
+                )}
                 {episodes.map((episode) => (
                     <motion.div
                         key={episode.id}

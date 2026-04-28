@@ -5,7 +5,6 @@ import VerticalNavbar from "@/components/common/VerticalNavbar";
 import Footer from "@/components/common/Footer";
 import Chatbot from "@/components/chatbot/Chatbot";
 import Providers from "./providers";
-import ThreeBackground from "@/components/ui/ThreeBackground";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -20,10 +19,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-0 pointer-events-none" />
+
         <Providers>
-          <ThreeBackground variant="stars" />
           <VerticalNavbar />
-          <main className="flex-1 ml-20 md:ml-24 transition-all duration-300">
+          <main className="flex-1 ml-20 md:ml-24 transition-all duration-300 relative z-10">
             {children}
             <Footer />
           </main>
