@@ -104,3 +104,62 @@ export async function getVideoDetails(videoId: string) {
         throw error;
     }
 }
+
+export async function getTrendingVideos() {
+    try {
+        const res = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
+            params: {
+                part: 'snippet,statistics',
+                chart: 'mostPopular',
+                regionCode: 'FR',
+                maxResults: 10,
+                key: YOUTUBE_API_KEY,
+            },
+        });
+        return res.data.items.map((item: { id: string; snippet: { title: string; description: string; thumbnails: { medium: { url: string } }; channelTitle: string; publishedAt: string; }; statistics: Record<string, unknown>; }) => ({
+            id: item.id,
+            title: item.snippet.title,
+            description: item.snippet.description,
+            thumbnail: item.snippet.thumbnails.medium.url,
+            channelTitle: item.snippet.channelTitle,
+            publishedAt: item.snippet.publishedAt,
+            statistics: item.statistics,
+            url: `https://www.youtube.com/watch?v=${item.id}`,
+        }));
+    } catch (error) {
+        console.error('YouTube trending error:', error);
+        return [];
+    }
+}
+
+export async function getNewReleases() {
+    try {
+        const res = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+            params: {
+                part: 'snippet',
+                maxResults: 10,
+                order: 'date',
+                type: 'video',
+                key: YOUTUBE_API_KEY,
+            },
+        });
+        const videoIds = res.data.items.map((item: YouTubeSearchItem) => item.id.videoId).join(',');
+        const statsRes = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
+            params: { part: 'statistics', id: videoIds, key: YOUTUBE_API_KEY },
+        });
+        const statsMap = new Map(statsRes.data.items.map((item: YouTubeVideoStatsItem) => [item.id, item.statistics]));
+        return res.data.items.map((item: YouTubeSearchItem) => ({
+            id: item.id.videoId,
+            title: item.snippet.title,
+            description: item.snippet.description,
+            thumbnail: item.snippet.thumbnails.medium.url,
+            channelTitle: item.snippet.channelTitle,
+            publishedAt: item.snippet.publishedAt,
+            statistics: statsMap.get(item.id.videoId) || {},
+            url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+        }));
+    } catch (error) {
+        console.error('YouTube new releases error:', error);
+        return [];
+    }
+}

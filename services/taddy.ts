@@ -1,42 +1,41 @@
-type PodcastSeries = {
+type TaddyEpisode = {
+    uuid: string;
     name: string;
-    imageUrl: string;
-    episodes: {
-        edges: EpisodeEdge[];
-    };
-};
-
-type EpisodeEdge = {
-    node: {
-        uuid: string;
-        name: string;
-        description: string;
-        audioUrl: string;
-        duration: number;
-    };
+    description: string;
+    audioUrl: string;
+    duration: number;
+    podcastTitle: string;
+    thumbnail: string;
 };
 
 type TaddySearchResponse = {
-    data?: {
-        search?: {
-            podcastSeries?: PodcastSeries[];
-        };
-    };
+    episodes?: TaddyEpisode[];
+    error?: string;
 };
 
 export async function searchTaddyPodcasts(keyword: string) {
-    const res = await fetch(`/api/taddy?q=${encodeURIComponent(keyword)}`);
-    const data: TaddySearchResponse = await res.json();
-    const series = data.data?.search?.podcastSeries || [];
-    return series.flatMap((show: PodcastSeries) =>
-        show.episodes.edges.map((edge: EpisodeEdge) => ({
-            id: edge.node.uuid,
-            title: edge.node.name,
-            description: edge.node.description,
-            podcastTitle: show.name,
-            audioUrl: edge.node.audioUrl,
-            thumbnail: show.imageUrl,
-            duration: edge.node.duration,
-        }))
-    );
+    try {
+        const res = await fetch(`/api/taddy?q=${encodeURIComponent(keyword)}`);
+        if (!res.ok) {
+            const errorBody = await res.text();
+            console.error('Taddy fetch failed', res.status, errorBody);
+            return [];
+        }
+        const json: TaddySearchResponse = await res.json();
+
+        console.log('Taddy processed episodes:', json.episodes?.length || 0);
+
+        return (json.episodes || []).map((ep) => ({
+            id: ep.uuid,
+            title: ep.name,
+            description: ep.description,
+            podcastTitle: ep.podcastTitle,
+            audioUrl: ep.audioUrl,
+            thumbnail: ep.thumbnail,
+            duration: ep.duration,
+        }));
+    } catch (error) {
+        console.error('Taddy service error:', error);
+        return [];
+    }
 }

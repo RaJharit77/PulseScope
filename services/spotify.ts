@@ -30,39 +30,83 @@ interface SpotifyTrackSearchResult {
     tracks?: { items: SpotifyTrack[] };
 }
 
-export async function searchSpotifyPodcasts(keyword: string) {
-    const res = await fetch(`/api/spotify?type=episode&q=${encodeURIComponent(keyword)}`);
-    const data = await res.json() as SpotifyEpisodeSearchResult;
-    return data.episodes?.items.map((episode) => ({
-        id: episode.id,
-        title: episode.name,
-        description: episode.description,
-        podcastTitle: episode.show.name,
-        audioUrl: episode.audio_preview_url,
-        thumbnail: episode.images[0]?.url,
-        duration: episode.duration_ms / 1000,
-        spotifyUrl: episode.external_urls.spotify,
-    })) || [];
+interface SpotifyAlbum {
+    id: string;
+    name: string;
+    artists: Array<{ name: string }>;
+    images: Array<{ url: string }>;
+    external_urls: { spotify: string };
+}
+
+interface SpotifyNewReleasesResult {
+    albums?: { items: SpotifyAlbum[] };
 }
 
 export async function searchSpotifyTracks(keyword: string) {
-    const res = await fetch(`/api/spotify?type=track&q=${encodeURIComponent(keyword)}`);
-    const data = await res.json() as SpotifyTrackSearchResult;
-    return data.tracks?.items.map((track) => ({
-        id: track.id,
-        title: track.name,
-        artist: track.artists.map((a) => a.name).join(', '),
-        album: track.album.name,
-        thumbnail: track.album.images[0]?.url,
-        popularity: track.popularity,
-        previewUrl: track.preview_url,
-        spotifyUrl: track.external_urls.spotify,
+    try {
+        const res = await fetch(`/api/spotify?type=track&q=${encodeURIComponent(keyword)}`);
+        if (!res.ok) {
+            console.error('Spotify tracks fetch failed', res.status, await res.text());
+            return [];
+        }
+        const data: SpotifyTrackSearchResult = await res.json();
+        return data.tracks?.items.map((track) => ({
+            id: track.id,
+            title: track.name,
+            artist: track.artists.map((a) => a.name).join(', '),
+            album: track.album.name,
+            thumbnail: track.album.images[0]?.url,
+            popularity: track.popularity,
+            previewUrl: track.preview_url,
+            spotifyUrl: track.external_urls.spotify,
+        })) || [];
+    } catch (error) {
+        console.error('Spotify tracks error:', error);
+        return [];
+    }
+}
+
+export async function searchSpotifyPodcasts(keyword: string) {
+    try {
+        const res = await fetch(`/api/spotify?type=episode&q=${encodeURIComponent(keyword)}`);
+        if (!res.ok) {
+            console.error('Spotify podcasts fetch failed', res.status, await res.text());
+            return [];
+        }
+        const data: SpotifyEpisodeSearchResult = await res.json();
+        return data.episodes?.items.map((episode) => ({
+            id: episode.id,
+            title: episode.name,
+            description: episode.description,
+            podcastTitle: episode.show.name,
+            audioUrl: episode.audio_preview_url,
+            thumbnail: episode.images[0]?.url,
+            duration: episode.duration_ms / 1000,
+            spotifyUrl: episode.external_urls.spotify,
+        })) || [];
+    } catch (error) {
+        console.error('Spotify podcasts error:', error);
+        return [];
+    }
+}
+
+export async function getNewReleases() {
+    const res = await fetch('/api/spotify/new-releases');
+    const data = await res.json() as SpotifyNewReleasesResult;
+    return data.albums?.items.map((album) => ({
+        id: album.id,
+        title: album.name,
+        artist: album.artists.map((a) => a.name).join(', '),
+        album: album.name,
+        thumbnail: album.images[0]?.url,
+        popularity: 0,
+        previewUrl: null,
+        spotifyUrl: album.external_urls.spotify,
     })) || [];
 }
 
 
-
-/*
+/* Ancienne implémentation avec SDK Spotify (remplacée par des routes API pour éviter les problèmes de CORS et de gestion de token côté client)
 import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 
 let spotifyApi: SpotifyApi | null = null;
