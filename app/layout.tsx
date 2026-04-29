@@ -19,8 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex">
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-0 pointer-events-none" />
-
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-0 pointer-events-none" />
         <Providers>
           <VerticalNavbar />
           <main className="flex-1 ml-20 md:ml-24 transition-all duration-300 relative z-10">
