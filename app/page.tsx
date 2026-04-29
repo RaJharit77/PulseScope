@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import ThreeBackground from '@/components/ui/ThreeBackground';
 import { auth } from '@/lib/auth';
 
 export default async function Home() {
@@ -7,7 +6,6 @@ export default async function Home() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
-      <ThreeBackground />
       <div className="relative z-10 max-w-4xl animate-fade-in-up">
         <h1 className="text-5xl md:text-8xl font-extrabold tracking-tight mb-4">
           <span className="inline-block bg-gradient-to-r from-primary via-purple-400 to-secondary text-6xl md:text-8xl bg-clip-text text-transparent animate-gradient-x">
@@ -59,7 +57,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <div className="absolute inset-0 -z-5 opacity-20 pointer-events-none">
+      <div className="absolute inset-0 -z-5 opacity-15 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/30 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-float-delayed" />
       </div>
