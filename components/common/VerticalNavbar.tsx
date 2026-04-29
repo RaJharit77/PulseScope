@@ -9,9 +9,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { SearchIcon } from 'lucide-react';
 
-const navItems = [
+const baseNavItems = [
     { href: '/', label: 'Accueil', icon: Home },
-    { href: '/explore', label: 'Explorer', icon: SearchIcon },
     { href: '/about', label: 'À propos', icon: Info },
     { href: '/demo', label: 'Démo', icon: PlayCircle },
     { href: '/test', label: 'Test API', icon: FlaskConical },
@@ -21,6 +20,10 @@ export default function VerticalNavbar() {
     const pathname = usePathname();
     const { data: session } = useSession();
     const [showUserMenu, setShowUserMenu] = useState(false);
+
+    const navItems = session
+        ? [...baseNavItems, { href: '/explore', label: 'Explorer', icon: SearchIcon }]
+        : baseNavItems;
 
     return (
         <motion.nav
