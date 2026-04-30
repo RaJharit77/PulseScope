@@ -1,12 +1,16 @@
 'use client';
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { motion } from 'framer-motion';
 
 interface PieDataItem {
     name: string;
     value: number;
     color: string;
+}
+
+interface EnhancedPieDataItem extends PieDataItem {
+    fill: string;
 }
 
 interface PieChartStatsProps {
@@ -30,6 +34,11 @@ export default function PieChartStats({ data, title }: PieChartStatsProps) {
         );
     }
 
+    const enhancedData: EnhancedPieDataItem[] = data.map((item) => ({
+        ...item,
+        fill: item.color,
+    }));
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -42,7 +51,7 @@ export default function PieChartStats({ data, title }: PieChartStatsProps) {
             <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                     <Pie
-                        data={data}
+                        data={enhancedData}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
@@ -50,13 +59,9 @@ export default function PieChartStats({ data, title }: PieChartStatsProps) {
                             `${name ?? ''} (${((percent ?? 0) * 100).toFixed(0)}%)`
                         }
                         outerRadius={100}
-                        fill="#8884d8"
                         dataKey="value"
-                    >
-                        {data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                    </Pie>
+                        nameKey="name"
+                    />
                     <Tooltip
                         contentStyle={{
                             backgroundColor: 'rgba(10,10,10,0.9)',
