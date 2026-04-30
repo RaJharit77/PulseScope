@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🎵 PulseScope
+<img src="./favicon.png" alt="PulseScope Logo" width="100" />
+
+# PulseScope
 
 **A modern music analytics & discovery platform**
 
@@ -9,6 +11,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-7-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+
+[![Live on Vercel](https://img.shields.io/badge/Live%20on-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)](https://pulsescope.vercel.app)
 
 </div>
 
@@ -146,28 +150,52 @@ Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 ## 🗂 Structure du projet
 
 ```
-pulsescope/
-├── app/                    # App Router Next.js
-│   ├── (auth)/             # Routes d'authentification
-│   ├── api/                # API Routes
-│   ├── generated/          # Client Prisma généré
-│   └── page.tsx            # Page d'accueil
-├── components/             # Composants React réutilisables
-├── lib/                    # Utilitaires & helpers
-├── prisma/
-│   └── schema.prisma       # Schéma de la base de données
-├── public/                 # Assets statiques
+pulsescope/ 
+├── app/ # Routes Next.js (App Router) 
+│   ├── (auth)/ # Pages d'authentification 
+│   ├── (dashboard)/ # Pages accessibles via la navbar 
+│   │   ├── dashboard/ # Tableau de bord connecté 
+│   │   ├── demo/ # Démonstration limitée 
+│   │   ├── explore/ # Recherche avancée (protégée) 
+│   │   ├── profile/ # Profil utilisateur 
+│   │   ├── test/ # Test des APIs (toutes sources) 
+│   │   ├── watch/[id]/ # Lecture vidéo YouTube 
+│   │   └── layout.tsx # Layout avec navbar + chatbot 
+│   ├── about/ # Page "À propos" 
+│   ├── api/ # Routes API (auth, spotify, taddy, chat, etc.) 
+|   ├── page.tsx # Page d'accueil 
+│   └── layout.tsx # Layout racine (fond 3D, footer) 
+| 
+├── components/ # Composants réutilisables 
+│   ├── chatbot/ # Chatbot assistant 
+│   ├── common/ # Navbar verticale, footer, header 
+│   ├── explore/ # Filtres, suggestions 
+│   ├── feeds/ # YouTube, Spotify, Taddy, Reddit 
+│   ├── ui/ # ThreeBackground, Loading, ErrorMessage 
+│   ├── videos/ # Lecteur vidéo et suggestions 
+│   └── dashboard/ # Contenu et graphiques du dashboard 
+├── hooks/ # Hooks personnalisés (useChatbot) 
+├── lib/ # Configuration NextAuth, Prisma, utils 
+├── services/ # Appels aux APIs externes 
+├── types/ # Types TypeScript globaux 
+├── prisma/ # Schéma Prisma 
+├── public/ # Ressources statiques 
+└── style/ # Styles globaux (Tailwind)
 ├── next.config.ts          # Configuration Next.js
-└── package.json
+├── .env.examples           # Variables d'environnement
+├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+├── LICENSE
+├── tailwind.config.ts
+└── README.md
 ```
 
 ---
 
 ## ☁️ Déploiement
 
-Le moyen le plus simple de déployer PulseScope est d'utiliser **[Vercel](https://vercel.com/)**, la plateforme des créateurs de Next.js.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+PulseScope est déployé en production sur **[Vercel](https://vercel.com/)**.
 
 > N'oubliez pas de configurer toutes vos variables d'environnement dans le dashboard Vercel avant le déploiement.
 
