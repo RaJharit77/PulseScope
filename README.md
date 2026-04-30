@@ -66,7 +66,7 @@
 |---|---|---|
 | [![Spotify](https://img.shields.io/badge/Spotify_API-1DB954?logo=spotify&logoColor=white)](https://developer.spotify.com/documentation/web-api) | 🚧 En cours | Données musicales, playlists, analyses audio |
 | [![YouTube](https://img.shields.io/badge/YouTube_Data_API-FF0000?logo=youtube&logoColor=white)](https://developers.google.com/youtube/v3) | ✅ Actif | Recherche vidéo, métadonnées, lecture intégrée |
-| [![Taddy](https://img.shields.io/badge/Taddy_API-6C47FF?logo=podcast&logoColor=white)](https://taddy.org/) | ✅ Actif | Données podcasts, épisodes, recherche audio |
+| [![Taddy](https://img.shields.io/badge/Taddy_API-6C47FF?logo=podcast&logoColor=white)](https://taddy.org/) | 🚧 En progression | Données podcasts, épisodes, recherche audio |
 
 ### Outils de développement
 
