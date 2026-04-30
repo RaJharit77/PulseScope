@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./public/img/icon/favicon.png" alt="PulseScope Logo" width="100" />
+<img src="./public/img/icon/icon.png" alt="PulseScope Logo" width="100" />
 
 # PulseScope
 
