@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Info, PlayCircle, FlaskConical, LayoutDashboard, LogOut, User, ChevronDown } from 'lucide-react';
+import { Home, Info, PlayCircle, FlaskConical, LayoutDashboard, LogOut, User, ChevronDown, TrendingUpIcon } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
@@ -22,7 +22,11 @@ export default function VerticalNavbar() {
     const [showUserMenu, setShowUserMenu] = useState(false);
 
     const navItems = session
-        ? [...baseNavItems, { href: '/explore', label: 'Explorer', icon: SearchIcon }]
+        ? [
+            ...baseNavItems,
+            { href: '/explore', label: 'Explorer', icon: SearchIcon },
+            { href: '/trends', label: 'Tendances', icon: TrendingUpIcon },
+        ]
         : baseNavItems;
 
     return (
