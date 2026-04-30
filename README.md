@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./favicon.png" alt="PulseScope Logo" width="100" />
+<img src="./public/img/icon/favicon.png" alt="PulseScope Logo" width="100" />
 
 # PulseScope
 
@@ -62,9 +62,11 @@
 
 ### APIs & Services
 
-| Service | Description |
-|---|---|
-| [![Spotify](https://img.shields.io/badge/Spotify_API-1DB954?logo=spotify&logoColor=white)](https://developer.spotify.com/documentation/web-api) | Données musicales, playlists, analyses audio |
+| Service | Statut | Description |
+|---|---|---|
+| [![Spotify](https://img.shields.io/badge/Spotify_API-1DB954?logo=spotify&logoColor=white)](https://developer.spotify.com/documentation/web-api) | 🚧 En cours | Données musicales, playlists, analyses audio |
+| [![YouTube](https://img.shields.io/badge/YouTube_Data_API-FF0000?logo=youtube&logoColor=white)](https://developers.google.com/youtube/v3) | ✅ Actif | Recherche vidéo, métadonnées, lecture intégrée |
+| [![Taddy](https://img.shields.io/badge/Taddy_API-6C47FF?logo=podcast&logoColor=white)](https://taddy.org/) | ✅ Actif | Données podcasts, épisodes, recherche audio |
 
 ### Outils de développement
 
@@ -84,6 +86,8 @@ Avant de commencer, assurez-vous d'avoir installé :
 - **[pnpm](https://pnpm.io/)** ≥ 9
 - **[PostgreSQL](https://www.postgresql.org/)** (local ou hébergé)
 - Un compte **[Spotify Developer](https://developer.spotify.com/dashboard)**
+- Un compte **[Google Cloud](https://console.cloud.google.com/)** (YouTube Data API v3)
+- Un compte **[Taddy](https://taddy.org/)**
 
 ---
 
@@ -108,7 +112,7 @@ pnpm prisma migrate dev
 
 ## 🔐 Variables d'environnement
 
-Créez un fichier `.env` à la racine du projet :
+Créez un fichier `.env` à la racine du projet (voir `.env.example`) :
 
 ```env
 # Base de données
@@ -118,9 +122,19 @@ DATABASE_URL="postgresql://user:password@localhost:5432/pulsescope"
 NEXTAUTH_SECRET="votre-secret-nextauth"
 NEXTAUTH_URL="http://localhost:3000"
 
-# Spotify OAuth
+# Spotify OAuth 🚧
 SPOTIFY_CLIENT_ID="votre-client-id-spotify"
 SPOTIFY_CLIENT_SECRET="votre-client-secret-spotify"
+
+# YouTube Data API v3
+NEXT_PUBLIC_YOUTUBE_API_KEY="votre-cle-youtube"
+
+# Taddy API
+TADDY_API_KEY="votre-cle-taddy"
+TADDY_USER_ID="votre-user-id-taddy"
+
+# HUGGINGFACE
+HUGGINGFACE_API_KEY="votre-clé-huggingface"
 
 # Google OAuth (optionnel)
 GOOGLE_CLIENT_ID="votre-client-id-google"
@@ -150,39 +164,39 @@ Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 ## 🗂 Structure du projet
 
 ```
-pulsescope/ 
-├── app/ # Routes Next.js (App Router) 
-│   ├── (auth)/ # Pages d'authentification 
-│   ├── (dashboard)/ # Pages accessibles via la navbar 
-│   │   ├── dashboard/ # Tableau de bord connecté 
-│   │   ├── demo/ # Démonstration limitée 
-│   │   ├── explore/ # Recherche avancée (protégée) 
-│   │   ├── profile/ # Profil utilisateur 
-│   │   ├── test/ # Test des APIs (toutes sources) 
-│   │   ├── watch/[id]/ # Lecture vidéo YouTube 
-│   │   └── layout.tsx # Layout avec navbar + chatbot 
-│   ├── about/ # Page "À propos" 
-│   ├── api/ # Routes API (auth, spotify, taddy, chat, etc.) 
-|   ├── page.tsx # Page d'accueil 
-│   └── layout.tsx # Layout racine (fond 3D, footer) 
-| 
-├── components/ # Composants réutilisables 
-│   ├── chatbot/ # Chatbot assistant 
-│   ├── common/ # Navbar verticale, footer, header 
-│   ├── explore/ # Filtres, suggestions 
-│   ├── feeds/ # YouTube, Spotify, Taddy, Reddit 
-│   ├── ui/ # ThreeBackground, Loading, ErrorMessage 
-│   ├── videos/ # Lecteur vidéo et suggestions 
-│   └── dashboard/ # Contenu et graphiques du dashboard 
-├── hooks/ # Hooks personnalisés (useChatbot) 
-├── lib/ # Configuration NextAuth, Prisma, utils 
-├── services/ # Appels aux APIs externes 
-├── types/ # Types TypeScript globaux 
-├── prisma/ # Schéma Prisma 
-├── public/ # Ressources statiques 
-└── style/ # Styles globaux (Tailwind)
-├── next.config.ts          # Configuration Next.js
-├── .env.examples           # Variables d'environnement
+pulsescope/
+├── app/                        # Routes Next.js (App Router)
+│   ├── (auth)/                 # Pages d'authentification
+│   ├── (dashboard)/            # Pages accessibles via la navbar
+│   │   ├── dashboard/          # Tableau de bord connecté
+│   │   ├── demo/               # Démonstration limitée
+│   │   ├── explore/            # Recherche avancée (protégée)
+│   │   ├── profile/            # Profil utilisateur
+│   │   ├── test/               # Test des APIs (toutes sources)
+│   │   ├── watch/[id]/         # Lecture vidéo YouTube
+│   │   └── layout.tsx          # Layout avec navbar + chatbot
+│   ├── about/                  # Page "À propos"
+│   ├── api/                    # Routes API (auth, spotify, taddy, chat, etc.)
+│   ├── page.tsx                # Page d'accueil
+│   └── layout.tsx              # Layout racine (fond 3D, footer)
+│
+├── components/                 # Composants réutilisables
+│   ├── chatbot/                # Chatbot assistant
+│   ├── common/                 # Navbar verticale, footer, header
+│   ├── explore/                # Filtres, suggestions
+│   ├── feeds/                  # YouTube, Spotify, Taddy, Reddit
+│   ├── ui/                     # ThreeBackground, Loading, ErrorMessage
+│   ├── videos/                 # Lecteur vidéo et suggestions
+│   └── dashboard/              # Contenu et graphiques du dashboard
+├── hooks/                      # Hooks personnalisés (useChatbot)
+├── lib/                        # Configuration NextAuth, Prisma, utils
+├── services/                   # Appels aux APIs externes
+├── types/                      # Types TypeScript globaux
+├── prisma/                     # Schéma Prisma
+├── public/                     # Ressources statiques
+└── style/                      # Styles globaux (Tailwind)
+├── next.config.ts              # Configuration Next.js
+├── .env.example                # Variables d'environnement
 ├── package.json
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
@@ -195,7 +209,7 @@ pulsescope/
 
 ## ☁️ Déploiement
 
-PulseScope est déployé en production sur **[Vercel](https://vercel.com/)**.
+PulseScope est déployé en production sur **[Vercel](https://pulse-scope-mg.vercel.app)**.
 
 > N'oubliez pas de configurer toutes vos variables d'environnement dans le dashboard Vercel avant le déploiement.
 
@@ -205,6 +219,6 @@ Consultez la [documentation de déploiement Next.js](https://nextjs.org/docs/app
 
 <div align="center">
 
-Made with ❤️ — [Next.js](https://nextjs.org/) · [Prisma](https://www.prisma.io/) · [Spotify API](https://developer.spotify.com/)
+Made with ❤️ — [Next.js](https://nextjs.org/) · [Prisma](https://www.prisma.io/) · [Spotify API](https://developer.spotify.com/) · [YouTube API](https://developers.google.com/youtube/v3) · [Taddy](https://taddy.org/)
 
 </div>
