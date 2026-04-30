@@ -219,6 +219,6 @@ Consultez la [documentation de déploiement Next.js](https://nextjs.org/docs/app
 
 <div align="center">
 
-Made with ❤️ — [Next.js](https://nextjs.org/) · [TailwindCSS](https://tailwindcss.com/docs/installation/framework-guides/nextjs) · [Prisma](https://www.prisma.io/) · [Spotify API](https://developer.spotify.com/) · [YouTube API](https://developers.google.com/youtube/v3) · [Taddy](https://taddy.org/)
+Made with ❤️ — [Next.js](https://nextjs.org/) · [TailwindCSS](https://tailwindcss.com/docs/installation/framework-guides/nextjs) · [Three.js](https://threejs.org) · [Prisma](https://www.prisma.io/) · [Spotify API](https://developer.spotify.com/) · [YouTube API](https://developers.google.com/youtube/v3) · [Taddy](https://taddy.org/)
 
 </div>
