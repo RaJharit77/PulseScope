@@ -57,7 +57,7 @@
 | Technologie | Version | Description |
 |---|---|---|
 | [![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/) | 7 | ORM / migrations |
-| [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/) | — | Base de données relationnelle |
+| [![NeonDB](https://img.shields.io/badge/NeonDB-PostgreSQL_17-00E599?logo=neon&logoColor=black)](https://neon.tech/) | — | Base de données PostgreSQL 17 serverless |
 | [![NextAuth.js](https://img.shields.io/badge/NextAuth.js-black?logo=auth0&logoColor=white)](https://next-auth.js.org/) | 5 beta | Authentification OAuth |
 
 ### APIs & Services
@@ -66,7 +66,7 @@
 |---|---|---|
 | [![Spotify](https://img.shields.io/badge/Spotify_API-1DB954?logo=spotify&logoColor=white)](https://developer.spotify.com/documentation/web-api) | 🚧 En cours | Données musicales, playlists, analyses audio |
 | [![YouTube](https://img.shields.io/badge/YouTube_Data_API-FF0000?logo=youtube&logoColor=white)](https://developers.google.com/youtube/v3) | ✅ Actif | Recherche vidéo, métadonnées, lecture intégrée |
-| [![Taddy](https://img.shields.io/badge/Taddy_API-6C47FF?logo=podcast&logoColor=white)](https://taddy.org/) | 🚧 En progression | Données podcasts, épisodes, recherche audio |
+| [![Taddy](https://img.shields.io/badge/Taddy_API-6C47FF?logo=podcast&logoColor=white)](https://taddy.org/) | ✅ Actif | Données podcasts, épisodes, recherche audio |
 
 ### Outils de développement
 
@@ -84,7 +84,7 @@ Avant de commencer, assurez-vous d'avoir installé :
 
 - **[Node.js](https://nodejs.org/)** ≥ 20
 - **[pnpm](https://pnpm.io/)** ≥ 9
-- **[PostgreSQL](https://www.postgresql.org/)** (local ou hébergé)
+- Un compte **[NeonDB](https://neon.tech/)** (PostgreSQL 17 serverless)
 - Un compte **[Spotify Developer](https://developer.spotify.com/dashboard)**
 - Un compte **[Google Cloud](https://console.cloud.google.com/)** (YouTube Data API v3)
 - Un compte **[Taddy](https://taddy.org/)**
@@ -115,8 +115,8 @@ pnpm prisma migrate dev
 Créez un fichier `.env` à la racine du projet (voir `.env.example`) :
 
 ```env
-# Base de données
-DATABASE_URL="postgresql://user:password@localhost:5432/pulsescope"
+# Base de données — NeonDB PostgreSQL 17
+DATABASE_URL="postgresql://user:password@ep-xxxx.eu-central-1.aws.neon.tech/pulsescope?sslmode=require"
 
 # NextAuth
 NEXTAUTH_SECRET="votre-secret-nextauth"
@@ -127,7 +127,7 @@ SPOTIFY_CLIENT_ID="votre-client-id-spotify"
 SPOTIFY_CLIENT_SECRET="votre-client-secret-spotify"
 
 # YouTube Data API v3
-NEXT_PUBLIC_YOUTUBE_API_KEY="votre-cle-youtube"
+YOUTUBE_API_KEY="votre-cle-youtube"
 
 # Taddy API
 TADDY_API_KEY="votre-cle-taddy"
@@ -209,7 +209,7 @@ pulsescope/
 
 ## ☁️ Déploiement
 
-PulseScope est déployé en production sur **[Vercel](https://pulse-scope-mg.vercel.app)**.
+PulseScope est déployé en production sur **[Vercel](https://vercel.com/)**.
 
 > N'oubliez pas de configurer toutes vos variables d'environnement dans le dashboard Vercel avant le déploiement.
 
@@ -219,6 +219,6 @@ Consultez la [documentation de déploiement Next.js](https://nextjs.org/docs/app
 
 <div align="center">
 
-Made with ❤️ — [Next.js](https://nextjs.org/) · [Prisma](https://www.prisma.io/) · [Spotify API](https://developer.spotify.com/) · [YouTube API](https://developers.google.com/youtube/v3) · [Taddy](https://taddy.org/)
+Made with ❤️ — [Next.js](https://nextjs.org/) · [TailwindCSS](https://tailwindcss.com/docs/installation/framework-guides/nextjs) · [Prisma](https://www.prisma.io/) · [Spotify API](https://developer.spotify.com/) · [YouTube API](https://developers.google.com/youtube/v3) · [Taddy](https://taddy.org/)
 
 </div>
