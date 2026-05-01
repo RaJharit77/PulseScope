@@ -72,7 +72,7 @@ export default function YouTubeFeed({ videos }: YouTubeFeedProps) {
             <div className="space-y-3 max-h-150 overflow-y-auto pr-2">
                 {videos.map((video, index) => (
                     <motion.div
-                        key={video.id}
+                        key={`${video.id}-${index}`} 
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}

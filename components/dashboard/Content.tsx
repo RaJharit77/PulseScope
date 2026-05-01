@@ -25,7 +25,7 @@ type SearchResults = {
     trends: Awaited<ReturnType<typeof getPopularityTrends>>
 }
 
-export default function DashboardContent() {
+export default function Content() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [searchResults, setSearchResults] = useState<SearchResults | null>(null)

@@ -5,7 +5,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
         <div className="min-h-screen flex flex-col">
             <VerticalNavbar />
-            <main className="flex-1 ml-20 p-6 relative z-10">
+            <main className="flex-1 w-full relative z-10 pt-16 md:pt-0">
                 {children}
             </main>
             <Chatbot />

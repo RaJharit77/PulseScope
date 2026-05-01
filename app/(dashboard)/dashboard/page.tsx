@@ -54,7 +54,7 @@ export default async function DashboardPage() {
 
     return (
         <div className="container mx-auto py-8 px-4">
-            <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 Tableau de bord
             </h1>
 
@@ -73,30 +73,35 @@ export default async function DashboardPage() {
             </div>
 
             <div className="mt-10">
-                <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                     Aperçu des dernières tendances
                 </h2>
-                <div className="grid lg:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <h3 className="text-lg font-semibold mb-2 text-red-400">🔥 YouTube</h3>
-                        {youtubeVideos.slice(0, 3).map((video: YouTubeTrendVideo) => (
-                            <div key={video.id} className="p-3 bg-white/5 rounded-lg mb-2 border border-white/10">
-                                <p className="font-medium truncate text-sm">{video.title}</p>
-                                <p className="text-xs text-gray-400">{video.channelTitle}</p>
-                                <p className="text-xs text-gray-500">
-                                    {parseInt(video.statistics.viewCount || '0').toLocaleString()} vues
-                                </p>
-                            </div>
-                        ))}
+                        <h3 className="text-lg font-semibold mb-3 text-red-400">🔥 YouTube</h3>
+                        <div className="space-y-2">
+                            {youtubeVideos.slice(0, 3).map((video: YouTubeTrendVideo) => (
+                                <div key={video.id} className="p-3 bg-white/5 rounded-lg border border-white/10">
+                                    <p className="font-medium truncate text-sm">{video.title}</p>
+                                    <p className="text-xs text-gray-400 mt-1">{video.channelTitle}</p>
+                                    <p className="text-xs text-gray-500">
+                                        {parseInt(video.statistics.viewCount || '0').toLocaleString()} vues
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
+
                     <div>
-                        <h3 className="text-lg font-semibold mb-2 text-purple-400">🎙️ Podcasts</h3>
-                        {taddyPodcasts.slice(0, 3).map((podcast: TaddyTrendEpisode) => (
-                            <div key={podcast.id} className="p-3 bg-white/5 rounded-lg mb-2 border border-white/10">
-                                <p className="font-medium truncate text-sm">{podcast.title}</p>
-                                <p className="text-xs text-gray-400">{podcast.podcastTitle}</p>
-                            </div>
-                        ))}
+                        <h3 className="text-lg font-semibold mb-3 text-purple-400">🎙️ Podcasts</h3>
+                        <div className="space-y-2">
+                            {taddyPodcasts.slice(0, 3).map((podcast: TaddyTrendEpisode) => (
+                                <div key={podcast.id} className="p-3 bg-white/5 rounded-lg border border-white/10">
+                                    <p className="font-medium truncate text-sm">{podcast.title}</p>
+                                    <p className="text-xs text-gray-400 mt-1">{podcast.podcastTitle}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

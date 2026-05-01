@@ -37,24 +37,24 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
                         type="text"
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
-                        placeholder="Recherchez un sujet (ex: Artificial Intelligence, Climate Change...)"
-                        className="w-full px-6 py-4 bg-dark/80 backdrop-blur-xl text-white rounded-xl border border-white/20 focus:outline-none focus:border-primary/50 transition-colors text-lg"
+                        placeholder="Recherchez un sujet..."
+                        className="w-full px-4 py-3 sm:px-6 sm:py-4 bg-dark/80 backdrop-blur-xl text-white rounded-xl border border-white/20 focus:outline-none focus:border-primary/50 transition-colors text-base sm:text-lg"
                         disabled={isLoading}
                     />
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="absolute right-2 px-4 py-2 bg-linear-to-r from-primary to-secondary text-white rounded-lg hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="absolute right-1.5 sm:right-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-linear-to-r from-primary to-secondary text-white rounded-lg hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 sm:gap-2"
                     >
                         {isLoading ? (
                             <>
-                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                <span>Recherche...</span>
+                                <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                <span className="hidden sm:inline">Recherche...</span>
                             </>
                         ) : (
                             <>
-                                <Search className="w-5 h-5" />
-                                <span>Explorer</span>
+                                <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+                                <span className="hidden sm:inline">Explorer</span>
                             </>
                         )}
                     </button>

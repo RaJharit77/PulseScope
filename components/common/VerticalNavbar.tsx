@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Info, PlayCircle, FlaskConical, LayoutDashboard, LogOut, User, ChevronDown, TrendingUpIcon } from 'lucide-react';
+import {
+    Home, Info, PlayCircle, FlaskConical, LayoutDashboard,
+    LogOut, User, ChevronDown, Search, TrendingUp, Menu, X,
+} from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import Image from 'next/image';
-import { SearchIcon } from 'lucide-react';
 
 const baseNavItems = [
     { href: '/', label: 'Accueil', icon: Home },
@@ -20,20 +22,24 @@ export default function VerticalNavbar() {
     const pathname = usePathname();
     const { data: session } = useSession();
     const [showUserMenu, setShowUserMenu] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const navItems = session
         ? [
             ...baseNavItems,
-            { href: '/explore', label: 'Explorer', icon: SearchIcon },
-            { href: '/trends', label: 'Tendances', icon: TrendingUpIcon },
+            { href: '/explore', label: 'Explorer', icon: Search },
+            { href: '/trends', label: 'Tendances', icon: TrendingUp },
         ]
         : baseNavItems;
 
-    return (
+    const closeMobile = () => setMobileOpen(false);
+
+    const desktopNav = (
         <motion.nav
             initial={{ x: -100 }}
             animate={{ x: 0 }}
-            className="fixed left-4 top-1/2 -translate-y-1/2 z-50 bg-dark/80 backdrop-blur-lg rounded-2xl p-3 border border-white/10 shadow-xl flex flex-col"
+            className="fixed left-4 top-1/2 -translate-y-1/2 z-50 bg-dark/80 backdrop-blur-lg
+                            rounded-2xl p-3 border border-white/10 shadow-xl flex-col hidden md:flex"
         >
             <ul className="flex flex-col gap-2">
                 {navItems.map((item) => {
@@ -42,11 +48,16 @@ export default function VerticalNavbar() {
                         <li key={item.href}>
                             <Link
                                 href={item.href}
-                                className={`relative flex items-center justify-center w-12 h-12 rounded-xl transition-all group ${isActive ? 'bg-primary text-white' : 'text-gray-400 hover:text-white hover:bg-white/10'
+                                className={`relative flex items-center justify-center w-12 h-12 rounded-xl
+                            transition-all group ${isActive
+                                        ? 'bg-primary text-white'
+                                        : 'text-gray-400 hover:text-white hover:bg-white/10'
                                     }`}
                             >
                                 <item.icon className="w-6 h-6" />
-                                <span className="absolute left-full ml-2 px-2 py-1 bg-dark/90 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap">
+                                <span className="absolute left-full ml-2 px-2 py-1 bg-dark/90 text-white text-sm
+                                                rounded-md opacity-0 group-hover:opacity-100 transition
+                                                pointer-events-none whitespace-nowrap">
                                     {item.label}
                                 </span>
                             </Link>
@@ -59,11 +70,16 @@ export default function VerticalNavbar() {
                         <li>
                             <Link
                                 href="/dashboard"
-                                className={`relative flex items-center justify-center w-12 h-12 rounded-xl transition-all group ${pathname === '/dashboard' ? 'bg-primary text-white' : 'text-gray-400 hover:text-white hover:bg-white/10'
+                                className={`relative flex items-center justify-center w-12 h-12 rounded-xl
+                            transition-all group ${pathname === '/dashboard'
+                                        ? 'bg-primary text-white'
+                                        : 'text-gray-400 hover:text-white hover:bg-white/10'
                                     }`}
                             >
                                 <LayoutDashboard className="w-6 h-6" />
-                                <span className="absolute left-full ml-2 px-2 py-1 bg-dark/90 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition pointer-events-none">
+                                <span className="absolute left-full ml-2 px-2 py-1 bg-dark/90 text-white text-sm
+                                                rounded-md opacity-0 group-hover:opacity-100 transition
+                                                pointer-events-none whitespace-nowrap">
                                     Dashboard
                                 </span>
                             </Link>
@@ -71,7 +87,8 @@ export default function VerticalNavbar() {
                         <li className="relative">
                             <button
                                 onClick={() => setShowUserMenu(!showUserMenu)}
-                                className="relative flex items-center justify-center w-12 h-12 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all group"
+                                className="relative flex items-center justify-center w-12 h-12 rounded-xl
+                                        text-gray-400 hover:text-white hover:bg-white/10 transition-all group"
                             >
                                 {session.user?.image ? (
                                     <Image
@@ -85,7 +102,9 @@ export default function VerticalNavbar() {
                                     <User className="w-6 h-6" />
                                 )}
                                 <ChevronDown className="w-4 h-4 absolute -bottom-1 -right-1 bg-dark rounded-full p-0.5" />
-                                <span className="absolute left-full ml-2 px-2 py-1 bg-dark/90 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition pointer-events-none">
+                                <span className="absolute left-full ml-2 px-2 py-1 bg-dark/90 text-white text-sm
+                                                rounded-md opacity-0 group-hover:opacity-100 transition
+                                                pointer-events-none whitespace-nowrap">
                                     {session.user?.name || 'Mon compte'}
                                 </span>
                             </button>
@@ -95,11 +114,18 @@ export default function VerticalNavbar() {
                                         initial={{ opacity: 0, scale: 0.9, x: 20 }}
                                         animate={{ opacity: 1, scale: 1, x: 0 }}
                                         exit={{ opacity: 0, scale: 0.9, x: 20 }}
-                                        className="absolute left-full ml-2 top-0 w-56 bg-dark/95 backdrop-blur-xl rounded-xl border border-white/10 p-3 shadow-xl"
+                                        className="absolute left-full ml-2 top-0 w-56 bg-dark/95 backdrop-blur-xl
+                                                rounded-xl border border-white/10 p-3 shadow-xl"
                                     >
                                         <div className="flex items-center gap-3 mb-3 pb-3 border-b border-white/10">
                                             {session.user?.image ? (
-                                                <Image src={session.user.image} alt="" width={40} height={40} className="rounded-full" />
+                                                <Image
+                                                    src={session.user.image}
+                                                    alt=""
+                                                    width={40}
+                                                    height={40}
+                                                    className="rounded-full"
+                                                />
                                             ) : (
                                                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                                                     <User className="w-5 h-5 text-primary" />
@@ -113,14 +139,16 @@ export default function VerticalNavbar() {
                                         <Link
                                             href="/profile"
                                             onClick={() => setShowUserMenu(false)}
-                                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:bg-white/5 rounded-lg transition mb-1"
+                                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-300
+                                                    hover:bg-white/5 rounded-lg transition mb-1"
                                         >
                                             <User className="w-4 h-4" />
                                             Mon profil
                                         </Link>
                                         <button
                                             onClick={() => signOut()}
-                                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition"
+                                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400
+                                                    hover:bg-red-500/10 rounded-lg transition"
                                         >
                                             <LogOut className="w-4 h-4" />
                                             Déconnexion
@@ -134,10 +162,13 @@ export default function VerticalNavbar() {
                     <li>
                         <Link
                             href="/auth/signin"
-                            className="relative flex items-center justify-center w-12 h-12 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all group"
+                            className="relative flex items-center justify-center w-12 h-12 rounded-xl
+                                        text-gray-400 hover:text-white hover:bg-white/10 transition-all group"
                         >
                             <User className="w-6 h-6" />
-                            <span className="absolute left-full ml-2 px-2 py-1 bg-dark/90 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition pointer-events-none">
+                            <span className="absolute left-full ml-2 px-2 py-1 bg-dark/90 text-white text-sm
+                                            rounded-md opacity-0 group-hover:opacity-100 transition
+                                            pointer-events-none whitespace-nowrap">
                                 Connexion
                             </span>
                         </Link>
@@ -145,5 +176,123 @@ export default function VerticalNavbar() {
                 )}
             </ul>
         </motion.nav>
+    );
+
+    const mobileNav = (
+        <div className="block md:hidden">
+            <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="fixed top-4 left-4 z-50 w-12 h-12 bg-dark/80 backdrop-blur-lg
+                            rounded-xl border border-white/10 flex items-center justify-center
+                            shadow-lg text-white"
+            >
+                {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, x: -200 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -200 }}
+                        className="fixed top-16 left-4 z-50 w-64 bg-dark/95 backdrop-blur-xl
+                                rounded-2xl border border-white/10 shadow-2xl p-4"
+                    >
+                        <ul className="flex flex-col gap-3">
+                            {navItems.map((item) => {
+                                const isActive = pathname === item.href;
+                                return (
+                                    <li key={item.href}>
+                                        <Link
+                                            href={item.href}
+                                            onClick={closeMobile}
+                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${isActive
+                                                ? 'bg-primary text-white'
+                                                : 'text-gray-300 hover:bg-white/5'
+                                                }`}
+                                        >
+                                            <item.icon className="w-5 h-5" />
+                                            <span className="text-sm font-medium">{item.label}</span>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+
+                            {session ? (
+                                <>
+                                    <li>
+                                        <Link
+                                            href="/dashboard"
+                                            onClick={closeMobile}
+                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${pathname === '/dashboard'
+                                                ? 'bg-primary text-white'
+                                                : 'text-gray-300 hover:bg-white/5'
+                                                }`}
+                                        >
+                                            <LayoutDashboard className="w-5 h-5" />
+                                            <span className="text-sm font-medium">Dashboard</span>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <div className="flex items-center gap-3 px-4 py-3 border-t border-white/10 mt-2 pt-3">
+                                            {session.user?.image ? (
+                                                <Image
+                                                    src={session.user.image}
+                                                    alt=""
+                                                    width={32}
+                                                    height={32}
+                                                    className="rounded-full"
+                                                />
+                                            ) : (
+                                                <User className="w-5 h-5 text-primary" />
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium truncate">
+                                                    {session.user?.name || 'Utilisateur'}
+                                                </p>
+                                                <p className="text-xs text-gray-400 truncate">{session.user?.email}</p>
+                                            </div>
+                                        </div>
+                                        <Link
+                                            href="/profile"
+                                            onClick={closeMobile}
+                                            className="flex items-center gap-3 px-4 py-3 rounded-xl transition text-gray-300 hover:bg-white/5 mt-1"
+                                        >
+                                            <User className="w-5 h-5" />
+                                            <span className="text-sm">Mon profil</span>
+                                        </Link>
+                                        <button
+                                            onClick={() => { signOut(); closeMobile(); }}
+                                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-red-400 hover:bg-red-500/10 mt-1"
+                                        >
+                                            <LogOut className="w-5 h-5" />
+                                            <span className="text-sm">Déconnexion</span>
+                                        </button>
+                                    </li>
+                                </>
+                            ) : (
+                                <li>
+                                    <Link
+                                        href="/auth/signin"
+                                        onClick={closeMobile}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-xl transition text-gray-300 hover:bg-white/5"
+                                    >
+                                        <User className="w-5 h-5" />
+                                        <span className="text-sm font-medium">Se connecter</span>
+                                    </Link>
+                                </li>
+                            )}
+                        </ul>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+
+    return (
+        <>
+            {desktopNav}
+            {mobileNav}
+        </>
     );
 }
