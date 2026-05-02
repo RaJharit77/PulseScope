@@ -3,24 +3,28 @@
 import { useState, useEffect } from 'react';
 import FilterBar from '@/components/explore/FilterBar';
 import YouTubeFeed from '@/components/feeds/YouTubeFeed';
+import HackerNewsFeed from '../feeds/HackerNewsFeed';
 import TaddyPodcastFeed from '@/components/feeds/TaddyPodcastFeed';
 import { searchYouTube, getTrendingVideos } from '@/services/youtube';
 import { searchTaddyPodcasts } from '@/services/taddy';
+import { searchHackerNews } from '@/services/hackernews';
 import SearchBar from '@/components/dashboard/SearchBar';
 import { Loader2 } from 'lucide-react';
 
 type YouTubeVideos = Awaited<ReturnType<typeof searchYouTube>>;
+type HackerNewsPosts = Awaited<ReturnType<typeof searchHackerNews>>;
 type TaddyPodcasts = Awaited<ReturnType<typeof searchTaddyPodcasts>>;
 
 interface SearchResults {
     youtube?: YouTubeVideos;
+    hackernews?: HackerNewsPosts;
     taddy?: TaddyPodcasts;
 }
 
-const AVAILABLE_FILTERS = ['youtube', 'taddy'] as const;
+const AVAILABLE_FILTERS = ['youtube', 'hackernews', 'taddy'] as const;
 
 export default function ExplorePage() {
-    const [activeFilters, setActiveFilters] = useState<string[]>(['youtube', 'taddy']);
+    const [activeFilters, setActiveFilters] = useState<string[]>(['youtube', 'hackernews', 'taddy']);
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<SearchResults | null>(null);
     const [keyword, setKeyword] = useState('');
@@ -37,9 +41,7 @@ export default function ExplorePage() {
         const fetchSuggestions = async () => {
             try {
                 const trending = await getTrendingVideos();
-                const titles = trending
-                    .map((v: { title: string }) => v.title)
-                    .slice(0, 10);
+                const titles = trending.map((v: { title: string }) => v.title).slice(0, 10);
                 const keywords = titles
                     .map((t: string) => t.split(' - ')[0].trim())
                     .filter((k: string) => k.length > 0);
@@ -65,6 +67,9 @@ export default function ExplorePage() {
 
             if (activeFilters.includes('youtube')) {
                 promises.push(searchYouTube(query).then(r => { output.youtube = r; }));
+            }
+            if (activeFilters.includes('hackernews')) {
+                promises.push(searchHackerNews(query).then(r => { output.hackernews = r; }));
             }
             if (activeFilters.includes('taddy')) {
                 promises.push(searchTaddyPodcasts(query).then(r => { output.taddy = r; }));
@@ -146,11 +151,18 @@ export default function ExplorePage() {
                         </h2>
                     )}
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
                         {results.youtube?.length ? (
                             <section>
                                 <h3 className="text-xl font-semibold mb-4 text-red-400">Vidéos YouTube</h3>
                                 <YouTubeFeed videos={results.youtube} />
+                            </section>
+                        ) : null}
+
+                        {results.hackernews?.length ? (
+                            <section>
+                                <h3 className="text-xl font-semibold mb-4 text-orange-400">Hacker News</h3>
+                                <HackerNewsFeed posts={results.hackernews} />
                             </section>
                         ) : null}
 
@@ -161,7 +173,7 @@ export default function ExplorePage() {
                             </section>
                         ) : null}
 
-                        {!results.youtube?.length && !results.taddy?.length && (
+                        {!results.youtube?.length && !results.hackernews?.length && !results.taddy?.length && (
                             <div className="col-span-full text-center py-12 text-gray-400">
                                 Aucun résultat trouvé pour « {keyword} ».
                             </div>

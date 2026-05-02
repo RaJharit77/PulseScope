@@ -6,7 +6,8 @@ import {
     Music,
     Podcast,
     Search,
-    ShieldCheck
+    ShieldCheck,
+    MessageCircle
 } from 'lucide-react';
 
 export default function AboutPage() {
@@ -44,13 +45,24 @@ export default function AboutPage() {
                     <FeatureCard
                         icon={<Search className="w-6 h-6 text-primary" />}
                         title="Recherche multi‑source"
-                        description="Un simple mot‑clé vous ouvre les portes de YouTube, Spotify et des podcasts. Comparez les résultats en un clin d’œil."
+                        description="Un simple mot‑clé vous ouvre les portes de YouTube, Hacker News et des podcasts. Comparez les résultats en un clin d’œil."
+                    />
+                    <FeatureCard
+                        icon={<MessageCircle className="w-6 h-6 text-orange-400" />}
+                        title="Tendances Hacker News"
+                        description="Découvrez les discussions tech et les sujets émergents les plus populaires du moment sur Hacker News."
+                    />
+                    {/*
+                    <FeatureCard
+                        icon={<Music className="w-6 h-6 text-pink-400" />}
+                        title="Tendances TikTok"
+                        description="Explorez les vidéos virales du moment, leur nombre de vues et de likes, et découvrez les créateurs."
                     />
                     <FeatureCard
                         icon={<Music className="w-6 h-6 text-amber-400" />}
                         title="Analyse musicale"
                         description="Visualisez la popularité des titres sur Spotify, écoutez des extraits et découvrez les artistes associés."
-                    />
+                    />*/}
                     <FeatureCard
                         icon={<Podcast className="w-6 h-6 text-purple-400" />}
                         title="Exploration de podcasts"
@@ -100,7 +112,7 @@ export default function AboutPage() {
                         href="/test"
                         className="px-6 py-3 bg-white/10 text-white rounded-lg font-semibold hover:bg-white/20 transition"
                     >
-                        Tester les APIs
+                        Tester le Pulse
                     </Link>
                 </div>
             </div>
