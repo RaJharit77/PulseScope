@@ -49,13 +49,19 @@ export default function TaddyPodcastFeed({ episodes }: { episodes: TaddyEpisode[
                         className="p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-purple-500/50 transition-all"
                     >
                         <div className="flex gap-3">
-                            <Image
-                                src={episode.thumbnail}
-                                alt={episode.title}
-                                width={64}
-                                height={64}
-                                className="rounded-lg object-cover"
-                            />
+                            <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden">
+                                <Image
+                                    src={episode.thumbnail || '/img/icon/favicon.png'}
+                                    alt={episode.title}
+                                    width={64}
+                                    height={64}
+                                    className="object-cover"
+                                    unoptimized={!episode.thumbnail?.startsWith('https://i.ytimg.com')}
+                                    onError={(e) => {
+                                        (e.target as HTMLImageElement).src = '/img/icon/favicon.png';
+                                    }}
+                                />
+                            </div>
                             <div className="flex-1">
                                 <h3 className="font-semibold text-white line-clamp-2">
                                     {episode.title}
