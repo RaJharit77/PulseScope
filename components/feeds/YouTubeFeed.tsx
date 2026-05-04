@@ -41,7 +41,7 @@ export default function YouTubeFeed({ videos }: YouTubeFeedProps) {
 
     return (
         <div className="space-y-4">
-            <h2 className="text-2xl font-bold bg-linear-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
                 Vidéos YouTube
             </h2>
 

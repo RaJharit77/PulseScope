@@ -33,8 +33,8 @@ export default function TaddyPodcastFeed({ episodes }: { episodes: TaddyEpisode[
 
     return (
         <div className="space-y-4">
-            <h2 className="text-2xl font-bold bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                Podcasts (Taddy)
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                Podcasts
             </h2>
             <audio ref={audioRef} className="hidden" />
             <div className="space-y-3 max-h-150 overflow-y-auto pr-2">
