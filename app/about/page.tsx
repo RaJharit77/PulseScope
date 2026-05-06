@@ -3,7 +3,7 @@ import {
     ArrowRight,
     TrendingUp,
     BarChart3,
-    Music,
+    //Music,
     Podcast,
     Search,
     ShieldCheck,
@@ -30,7 +30,7 @@ export default function AboutPage() {
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
                     Dans un univers numérique saturé d’informations, PulseScope agit comme un phare. Nous agrégeons en temps réel
-                    les signaux faibles et les tendances fortes issues de YouTube, Spotify, et des podcasts (via Taddy). Que vous
+                    les signaux faibles et les tendances fortes issues de YouTube, news (via Hacker news), Spotify(à l&apos;étude) et des podcasts (via Taddy). Que vous
                     soyez créateur de contenu, marketeur, analyste ou simplement curieux, notre mission est de vous donner une
                     longueur d’avance dans la compréhension des sujets émergents.
                 </p>
@@ -82,7 +82,7 @@ export default function AboutPage() {
                     Comment ça marche ?
                 </h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                    PulseScope s’appuie sur les API officielles de YouTube, Spotify et Taddy. Lorsque vous effectuez une recherche,
+                    PulseScope s’appuie sur les API officielles de YouTube, Hacker news, Spotify(à l&apos;étude) et Taddy. Lorsque vous effectuez une recherche,
                     nous interrogeons ces services en parallèle et affichons les résultats de manière unifiée. Aucune donnée
                     personnelle n’est collectée sans votre consentement. Vous pouvez utiliser la plateforme sans compte, mais la
                     création d’un compte gratuit vous donne accès à des fonctionnalités avancées comme la sauvegarde de vos
