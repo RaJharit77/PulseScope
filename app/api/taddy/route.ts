@@ -52,7 +52,6 @@ export async function GET(request: Request) {
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    // 1. Search for podcasts
     const searchRes = await fetch(TADDY_API_URL, {
       method: 'POST',
       headers: {
@@ -88,7 +87,6 @@ export async function GET(request: Request) {
     }
 
     const searchData: TaddySearchResult = await searchRes.json();
-    console.log('Taddy search response:', JSON.stringify(searchData, null, 2));
 
     if (searchData.errors) {
       console.error('Taddy GraphQL errors:', searchData.errors);
@@ -98,7 +96,6 @@ export async function GET(request: Request) {
     const series = searchData.data?.search?.podcastSeries || [];
     console.log(`Found ${series.length} podcast series`);
 
-    // 2. Get latest episodes for each series
     const episodesPromises = series.map(async (show: TaddyPodcastSeries) => {
       const episodesRes = await fetch(TADDY_API_URL, {
         method: 'POST',
@@ -109,10 +106,10 @@ export async function GET(request: Request) {
         },
         body: JSON.stringify({
           query: `
-            query GetLatestEpisodes($uuid: ID!) {
+            query GetEpisodes($uuid: ID!) {
               getPodcastSeries(uuid: $uuid) {
                 uuid
-                episodes(limitPerPage: 5, sortOrder: PUBLISHED_DESC) {
+                episodes {
                   uuid
                   name
                   description
@@ -127,12 +124,12 @@ export async function GET(request: Request) {
       });
 
       if (!episodesRes.ok) {
-        console.error('Failed to fetch episodes for', show.uuid, episodesRes.status);
+        const errorText = await episodesRes.text();
+        console.error('Failed to fetch episodes for', show.uuid, episodesRes.status, errorText);
         return [];
       }
 
       const episodesData: TaddyEpisodesResult = await episodesRes.json();
-      console.log(`Episodes data for ${show.name}:`, JSON.stringify(episodesData, null, 2));
 
       const episodes = episodesData.data?.getPodcastSeries?.episodes || [];
       return episodes.map((ep) => ({

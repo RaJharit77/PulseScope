@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Play, Eye, Clock } from 'lucide-react'
+import { Play, Eye, Clock, X } from 'lucide-react'
 import Image from 'next/image'
 
 interface YouTubeStatistics {
@@ -41,7 +41,7 @@ export default function YouTubeFeed({ videos }: YouTubeFeedProps) {
 
     return (
         <div className="space-y-4">
-            <h2 className="text-2xl font-bold bg-linear-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
                 Vidéos YouTube
             </h2>
 
@@ -62,9 +62,9 @@ export default function YouTubeFeed({ videos }: YouTubeFeedProps) {
                     </div>
                     <button
                         onClick={() => setPlayingVideo(null)}
-                        className="absolute top-2 right-2 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                        className="absolute top-0 right-0 px-2 py-3 bg-red-500 text-white rounded-l-xl hover:bg-red-600 transition-colors"
                     >
-                        Fermer
+                        <X className="w-5 h-5" />
                     </button>
                 </motion.div>
             )}

@@ -5,17 +5,21 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import SearchBar from '@/components/dashboard/SearchBar';
 import YouTubeFeed from '@/components/feeds/YouTubeFeed';
+import HackerNewsFeed from '@/components/feeds/HackerNewsFeed';
 import TaddyPodcastFeed from '@/components/feeds/TaddyPodcastFeed';
 import { searchYouTube } from '@/services/youtube';
 import { searchTaddyPodcasts } from '@/services/taddy';
-import { Music, Podcast, X } from 'lucide-react';
+import { searchHackerNews } from '@/services/hackernews';
+import { Podcast, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type YouTubeVideos = Awaited<ReturnType<typeof searchYouTube>>;
+type HackerNewsPosts = Awaited<ReturnType<typeof searchHackerNews>>;
 type TaddyPodcasts = Awaited<ReturnType<typeof searchTaddyPodcasts>>;
 
 interface SearchResults {
     youtube?: YouTubeVideos;
+    hackernews?: HackerNewsPosts;
     taddy?: TaddyPodcasts;
 }
 
@@ -27,18 +31,16 @@ export default function TestPage() {
     const [keyword, setKeyword] = useState('');
     const [searchCount, setSearchCount] = useState(0);
 
-    // Notification Spotify
-    const [showSpotifyNotice, setShowSpotifyNotice] = useState(true);
+    const [showNotice, setShowNotice] = useState(true);
 
     const MAX_SEARCHES = 3;
     const limitReached = !session && searchCount >= MAX_SEARCHES;
 
-    // Auto‑fermeture de la notification après 6 secondes
     useEffect(() => {
-        if (!showSpotifyNotice) return;
-        const timer = setTimeout(() => setShowSpotifyNotice(false), 6000);
+        if (!showNotice) return;
+        const timer = setTimeout(() => setShowNotice(false), 6000);
         return () => clearTimeout(timer);
-    }, [showSpotifyNotice]);
+    }, [showNotice]);
 
     const handleSearch = async (query: string) => {
         if (!query || limitReached) return;
@@ -47,11 +49,12 @@ export default function TestPage() {
         setSearched(true);
         try {
             if (session) {
-                const [youtube, taddy] = await Promise.all([
+                const [youtube, hackernews, taddy] = await Promise.all([
                     searchYouTube(query),
+                    searchHackerNews(query),
                     searchTaddyPodcasts(query),
                 ]);
-                setResults({ youtube, taddy });
+                setResults({ youtube, hackernews, taddy });
             } else {
                 const youtube = await searchYouTube(query);
                 setResults({ youtube });
@@ -73,7 +76,7 @@ export default function TestPage() {
                 </h1>
                 <p className="text-gray-400 mt-2">
                     {session
-                        ? 'Recherchez un terme pour voir les résultats en direct depuis YouTube et les podcasts Taddy.'
+                        ? 'Recherchez un terme pour voir les résultats en direct depuis YouTube, Hacker News et les podcasts Taddy.'
                         : 'Recherchez un terme pour voir les résultats YouTube (version invité).'}
                 </p>
                 {!session && (
@@ -92,20 +95,20 @@ export default function TestPage() {
                 )}
             </div>
 
-            {/* Notification temporaire Spotify */}
             <AnimatePresence>
-                {showSpotifyNotice && (
+                {showNotice && (
                     <motion.div
                         initial={{ opacity: 0, y: -20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="relative mx-auto max-w-xl mb-4 flex items-center gap-2 p-3 bg-amber-500/10 backdrop-blur-sm border border-amber-500/30 rounded-xl text-amber-200 text-sm shadow-lg"
+                        className="relative mx-auto max-w-xl mb-4 flex items-center gap-2 p-3 bg-orange-500/10 backdrop-blur-sm border border-orange-500/30 rounded-xl text-orange-200 text-sm shadow-lg"
                     >
-                        <Music className="w-4 h-4 shrink-0" />
-                        <span className="flex-1">Spotify est temporairement indisponible (en cours de développement).</span>
+                        <span className="flex-1">
+                            Nouveau : Hacker News est désormais disponible pour les utilisateurs connectés !
+                        </span>
                         <button
-                            onClick={() => setShowSpotifyNotice(false)}
-                            className="p-0.5 rounded-full hover:bg-amber-500/20 transition"
+                            onClick={() => setShowNotice(false)}
+                            className="p-0.5 rounded-full hover:bg-orange-500/20 transition"
                             aria-label="Fermer la notification"
                         >
                             <X className="w-4 h-4" />
@@ -142,8 +145,7 @@ export default function TestPage() {
                                 </h2>
                             )}
 
-                            <div className={`grid grid-cols-1 ${session ? 'lg:grid-cols-2' : ''} gap-8`}>
-                                {/* YouTube */}
+                            <div className={`grid grid-cols-1 ${session ? 'lg:grid-cols-2 xl:grid-cols-3' : ''} gap-8`}>
                                 <section>
                                     <h3 className="text-xl font-semibold mb-4 text-red-400 flex items-center gap-2">
                                         <span className="w-2 h-2 bg-red-400 rounded-full" />
@@ -156,7 +158,20 @@ export default function TestPage() {
                                     )}
                                 </section>
 
-                                {/* Taddy – seulement si connecté */}
+                                {session && (
+                                    <section>
+                                        <h3 className="text-xl font-semibold mb-4 text-orange-400 flex items-center gap-2">
+                                            <span className="w-2 h-2 bg-orange-400 rounded-full" />
+                                            Hacker News
+                                        </h3>
+                                        {results.hackernews?.length ? (
+                                            <HackerNewsFeed posts={results.hackernews} />
+                                        ) : (
+                                            <EmptyPlaceholder />
+                                        )}
+                                    </section>
+                                )}
+
                                 {session && (
                                     <section>
                                         <h3 className="text-xl font-semibold mb-4 text-purple-400 flex items-center gap-2">

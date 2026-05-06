@@ -33,8 +33,8 @@ export default function TaddyPodcastFeed({ episodes }: { episodes: TaddyEpisode[
 
     return (
         <div className="space-y-4">
-            <h2 className="text-2xl font-bold bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                Podcasts (Taddy)
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                Podcasts
             </h2>
             <audio ref={audioRef} className="hidden" />
             <div className="space-y-3 max-h-150 overflow-y-auto pr-2">
@@ -49,13 +49,19 @@ export default function TaddyPodcastFeed({ episodes }: { episodes: TaddyEpisode[
                         className="p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-purple-500/50 transition-all"
                     >
                         <div className="flex gap-3">
-                            <Image
-                                src={episode.thumbnail}
-                                alt={episode.title}
-                                width={64}
-                                height={64}
-                                className="rounded-lg object-cover"
-                            />
+                            <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden">
+                                <Image
+                                    src={episode.thumbnail || '/img/icon/favicon.png'}
+                                    alt={episode.title}
+                                    width={64}
+                                    height={64}
+                                    className="object-cover"
+                                    unoptimized={!episode.thumbnail?.startsWith('https://i.ytimg.com')}
+                                    onError={(e) => {
+                                        (e.target as HTMLImageElement).src = '/img/icon/favicon.png';
+                                    }}
+                                />
+                            </div>
                             <div className="flex-1">
                                 <h3 className="font-semibold text-white line-clamp-2">
                                     {episode.title}
