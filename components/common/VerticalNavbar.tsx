@@ -15,7 +15,7 @@ const baseNavItems = [
     { href: '/', label: 'Accueil', icon: Home },
     { href: '/about', label: 'À propos', icon: Info },
     { href: '/demo', label: 'Démo', icon: PlayCircle },
-    { href: '/test', label: 'Test API', icon: FlaskConical },
+    { href: '/test', label: 'Test', icon: FlaskConical },
 ];
 
 export default function VerticalNavbar() {
