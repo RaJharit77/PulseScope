@@ -8,6 +8,7 @@ import BarChartStats from '@/components/dashboard/BarChartStats';
 import YouTubeFeed from '@/components/feeds/YouTubeFeed';
 import TaddyPodcastFeed from '@/components/feeds/TaddyPodcastFeed';
 import HackerNewsFeed from '@/components/feeds/HackerNewsFeed';
+import { BarChart3, PieChart, TrendingUp, Video, Radio, Globe } from 'lucide-react';
 
 type YouTubeTrendVideo = NonNullable<Awaited<ReturnType<typeof getYouTubeTrending>>>[number];
 type TaddyTrendEpisode = NonNullable<Awaited<ReturnType<typeof getTaddyTrendingPodcasts>>>[number];
@@ -60,41 +61,66 @@ export default async function DashboardPage() {
     ];
 
     return (
-        <div className="container mx-auto py-8 px-4">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Tableau de bord
-            </h1>
+        <div className="container mx-auto py-8 px-4 md:px-8 max-w-7xl">
+            {/* En-tête */}
+            <div className="mb-10">
+                <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    Tableau de bord
+                </h1>
+                <p className="text-gray-400 text-sm md:text-base">
+                    Aperçu en temps réel des tendances de toutes les sources.
+                </p>
+            </div>
 
+            {/* Cartes de statistiques */}
             <StatsCards
                 youtubeCount={youtubeVideos.length}
                 hackerNewsCount={hackerNewsPosts.length}
                 taddyCount={taddyPodcasts.length}
             />
 
-            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <PieChartStats title="Répartition des tendances YouTube" data={pieData} />
-                <BarChartStats
-                    title="Volume de contenu par source"
-                    data={barData}
-                    bars={[
-                        { key: 'YouTube', color: '#FF0000', name: 'YouTube' },
-                        { key: 'Hacker News', color: '#FF6600', name: 'Hacker News' },
-                        { key: 'Podcasts Taddy', color: '#8B5CF6', name: 'Podcasts Taddy' },
-                    ]}
-                />
+            {/* Graphiques */}
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6">
+                    <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <PieChart className="w-5 h-5 text-primary" />
+                        Répartition des tendances YouTube
+                    </h2>
+                    <PieChartStats title="" data={pieData} />
+                </div>
+                <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6">
+                    <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5 text-secondary" />
+                        Volume de contenu par source
+                    </h2>
+                    <BarChartStats
+                        title=""
+                        data={barData}
+                        bars={[
+                            { key: 'YouTube', color: '#FF0000', name: 'YouTube' },
+                            { key: 'Hacker News', color: '#FF6600', name: 'Hacker News' },
+                            { key: 'Podcasts Taddy', color: '#8B5CF6', name: 'Podcasts Taddy' },
+                        ]}
+                    />
+                </div>
             </div>
 
+            {/* Aperçu rapide */}
             <div className="mt-10">
-                <h2 className="text-xl sm:text-2xl font-semibold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Aperçu des dernières tendances
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-primary" />
+                    Dernières tendances
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <h3 className="text-lg font-semibold mb-3 text-red-400">🔥 YouTube</h3>
-                        <div className="space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* YouTube */}
+                    <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5">
+                        <h3 className="text-sm font-semibold mb-4 flex items-center gap-2 text-red-400">
+                            <Video className="w-4 h-4" /> YouTube
+                        </h3>
+                        <div className="space-y-3">
                             {youtubeVideos.slice(0, 3).map((video: YouTubeTrendVideo) => (
-                                <div key={video.id} className="p-3 bg-white/5 rounded-lg border border-white/10">
-                                    <p className="font-medium truncate text-sm">{video.title}</p>
+                                <div key={video.id} className="p-3 bg-white/5 rounded-lg border border-white/5 hover:border-red-500/30 transition">
+                                    <p className="font-medium truncate text-sm text-gray-200">{video.title}</p>
                                     <p className="text-xs text-gray-400 mt-1">{video.channelTitle}</p>
                                     <p className="text-xs text-gray-500">
                                         {parseInt(video.statistics?.viewCount || '0').toLocaleString()} vues
@@ -104,12 +130,15 @@ export default async function DashboardPage() {
                         </div>
                     </div>
 
-                    <div>
-                        <h3 className="text-lg font-semibold mb-3 text-orange-400">💡 Hacker News</h3>
-                        <div className="space-y-2">
+                    {/* Hacker News */}
+                    <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5">
+                        <h3 className="text-sm font-semibold mb-4 flex items-center gap-2 text-orange-400">
+                            <Globe className="w-4 h-4" /> Hacker News
+                        </h3>
+                        <div className="space-y-3">
                             {hackerNewsPosts.slice(0, 3).map((post: HackerNewsPost) => (
-                                <div key={post.id} className="p-3 bg-white/5 rounded-lg border border-white/10">
-                                    <p className="font-medium truncate text-sm">{post.title}</p>
+                                <div key={post.id} className="p-3 bg-white/5 rounded-lg border border-white/5 hover:border-orange-500/30 transition">
+                                    <p className="font-medium truncate text-sm text-gray-200">{post.title}</p>
                                     <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                                         <span>{post.points} points</span>
                                         <span>{post.comments} commentaires</span>
@@ -119,12 +148,15 @@ export default async function DashboardPage() {
                         </div>
                     </div>
 
-                    <div>
-                        <h3 className="text-lg font-semibold mb-3 text-purple-400">🎙️ Podcasts</h3>
-                        <div className="space-y-2">
+                    {/* Podcasts */}
+                    <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5">
+                        <h3 className="text-sm font-semibold mb-4 flex items-center gap-2 text-purple-400">
+                            <Radio className="w-4 h-4" /> Podcasts
+                        </h3>
+                        <div className="space-y-3">
                             {taddyPodcasts.slice(0, 3).map((podcast: TaddyTrendEpisode) => (
-                                <div key={podcast.id} className="p-3 bg-white/5 rounded-lg border border-white/10">
-                                    <p className="font-medium truncate text-sm">{podcast.title}</p>
+                                <div key={podcast.id} className="p-3 bg-white/5 rounded-lg border border-white/5 hover:border-purple-500/30 transition">
+                                    <p className="font-medium truncate text-sm text-gray-200">{podcast.title}</p>
                                     <p className="text-xs text-gray-400 mt-1">{podcast.podcastTitle}</p>
                                 </div>
                             ))}
@@ -133,18 +165,20 @@ export default async function DashboardPage() {
                 </div>
             </div>
 
-            <div className="mt-12 space-y-8">
-                <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            {/* Flux complets */}
+            <div className="mt-12">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-primary" />
                     Détail des tendances
                 </h2>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5">
                         <YouTubeFeed videos={youtubeVideos} />
                     </div>
-                    <div>
+                    <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5">
                         <HackerNewsFeed posts={hackerNewsPosts} />
                     </div>
-                    <div>
+                    <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5">
                         <TaddyPodcastFeed episodes={taddyPodcasts} />
                     </div>
                 </div>
