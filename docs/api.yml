@@ -1,0 +1,79 @@
+openapi: 3.0.0
+info:
+  title: PulseScope Chat API
+  description: API de l'assistant conversationnel de PulseScope, basée sur Groq (LLaMA).
+  version: 1.0.0
+servers:
+  - url: https://votre-domaine.com/api
+    description: Serveur de production
+  - url: http://localhost:3000/api
+    description: Serveur de développement
+
+paths:
+  /chat:
+    post:
+      summary: Envoyer un message à l'assistant
+      description: Reçoit un message utilisateur et retourne une réponse générée par l'IA.
+      operationId: sendMessage
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+              properties:
+                message:
+                  type: string
+                  description: Le message posé par l'utilisateur
+                  example: "Comment trouver les tendances YouTube ?"
+      responses:
+        '200':
+          description: Réponse de l'assistant
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reply:
+                    type: string
+                    description: Réponse textuelle de l'IA
+                    example: "Vous pouvez utiliser la section 'Tendances' pour voir les vidéos populaires du moment."
+        '400':
+          description: Requête invalide (message manquant)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Message requis"
+        '500':
+          description: Erreur interne du serveur (problème avec Groq ou autre)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      reply:
+                        type: string
+                        description: Message d'erreur générique
+                        example: "Désolé, je n'ai pas pu répondre."
+                  - type: object
+                    properties:
+                      error:
+                        type: string
+                        example: "Erreur interne"
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Clé API personnalisée pour sécuriser l'accès à l'endpoint (optionnelle).
